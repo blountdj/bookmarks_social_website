@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "social_django", #SOCIAL LOGIN by python_social_auth
     "django_extensions", # TO ALLOW HTTPS in testing using RunServerPlus
+    "actions.apps.ActionsConfig"
 ]
 
 MIDDLEWARE = [
@@ -144,3 +146,10 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.twitter.TwitterOAuth', # Twitter social log-in (NOT IN USE)
     'social_core.backends.google.GoogleOAuth2' # Not implemented. Continue on p167
 ]
+
+"""
+Django adds a get_absolute_url() method dynamically to any models that appear in the ABSOLUTE_URL_OVERRIDES setting. This method returns the corresponding URL for the given model specified in the setting. You return the user_detail URL for the given user. Now, you can use get_absolute_url() on a User instance to retrieve its corresponding URL. p217
+"""
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user' : lambda u: reverse_lazy('user_detail', args=[u.username])
+}
